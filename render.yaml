@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: afya-yangu-work-diary
+    runtime: node
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: SESSION_DAYS
+        value: "7"
+      - key: DB_FILE
+        value: /var/data/work-diary.json
+    disk:
+      name: work-diary-data
+      mountPath: /var/data
+      sizeGB: 1

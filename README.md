@@ -7,17 +7,22 @@ A shared, authenticated work diary for staff and administrators.
 1. Copy `.env.example` to `.env`.
 2. Set `ADMIN_EMAIL` and a unique `ADMIN_PASSWORD` with at least 12 characters.
 3. Install dependencies: `npm install`.
-4. Start the app: `npm start`.
-5. Open `http://localhost:3000`.
+4. For PostgreSQL-backed storage, set `DATABASE_URL`; without it, the app uses the local JSON fallback.
+5. Start the app: `npm start`.
+6. Open `http://localhost:3000`.
 
-The shared data file is created in `data/work-diary.json`. The `data` directory is ignored by Git.
+The shared data file is created in `data/work-diary.json` only when `DATABASE_URL` is not set. The `data` directory is ignored by Git.
 
 ## Staff access
 
-Sign in as administrator, create each staff member, and assign a 4 to 8 digit PIN. Staff then sign in with their name and PIN. Entries are stored centrally in SQLite and are shared across browsers.
+Sign in as administrator, create each staff member, and assign a 4 to 8 digit PIN. Staff then sign in with their name and PIN. Entries, attendance, and tasks are stored centrally in PostgreSQL when `DATABASE_URL` is configured, or in the local JSON fallback, and are shared across browsers.
+
+## Task assignment
+
+Administrators can create a task from the Team administration panel. Each task is assigned automatically to every active staff member at the time it is created. Staff can view their assigned tasks and mark them done or reopen them.
 
 ## Deployment
 
-`render.yaml` describes a Render deployment and includes a persistent disk for the data file. Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` as secret environment variables in Render. Do not commit `.env` or data files.
+`render.yaml` describes a Render deployment and includes a persistent disk for the file fallback. For the Railway deployment, set `DATABASE_URL` to the managed PostgreSQL service reference along with `ADMIN_EMAIL` and `ADMIN_PASSWORD`. Do not commit `.env` or data files.
 
-For multiple app instances, replace the file store with a managed database before scaling horizontally.
+For multiple app instances, use the managed PostgreSQL store before scaling horizontally. The JSON file fallback is intended for a single app instance.

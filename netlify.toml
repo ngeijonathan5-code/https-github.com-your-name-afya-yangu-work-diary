@@ -1,0 +1,14 @@
+[build]
+  base = "/"
+  command = "echo \"No build step required\""
+  publish = "public"
+
+[[redirects]]
+  from = "/health"
+  to = "/api/health"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

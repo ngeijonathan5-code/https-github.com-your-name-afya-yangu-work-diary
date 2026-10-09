@@ -2,16 +2,16 @@
 
 A shared, authenticated work diary for staff and administrators.
 
-## Local setup
+## Running locally
 
-1. Copy `.env.example` to `.env`.
-2. Set `ADMIN_EMAIL` and a unique `ADMIN_PASSWORD` with at least 12 characters.
-3. Install dependencies: `npm install`.
-4. For PostgreSQL-backed storage, set `DATABASE_URL`; without it, the app uses the local JSON fallback.
-5. Start the app: `npm start`.
-6. Open `http://localhost:3000`.
+1. Install dependencies: `npm install`.
+2. Start the app with Netlify emulation: `npm run dev` (runs `netlify dev`).
 
-The shared data file is created in `data/work-diary.json` only when `DATABASE_URL` is not set. The `data` directory is ignored by Git.
+Data is stored in Netlify Database (managed Postgres). The schema lives in `db/schema.ts`, and migrations in `netlify/database/migrations/` are applied automatically on deploy.
+
+## Administrator account
+
+On first visit, if no administrator exists, the Administrator tab offers a one-time setup to choose the admin email and password (12+ characters). Alternatively, set `ADMIN_EMAIL` and `ADMIN_PASSWORD` as Netlify environment variables and the admin account is created or kept in sync with them.
 
 ## Staff access
 
@@ -23,6 +23,4 @@ Administrators can create a task from the Team administration panel. Each task i
 
 ## Deployment
 
-`render.yaml` describes a Render deployment and includes a persistent disk for the file fallback. For the Railway deployment, set `DATABASE_URL` to the managed PostgreSQL service reference along with `ADMIN_EMAIL` and `ADMIN_PASSWORD`. Do not commit `.env` or data files.
-
-For multiple app instances, use the managed PostgreSQL store before scaling horizontally. The JSON file fallback is intended for a single app instance.
+The app deploys on Netlify: static files are served from `public/`, and the API runs as a Netlify Function at `/api/*` (`netlify/functions/api.mts`). Do not commit `.env` files.

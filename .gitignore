@@ -7,3 +7,5 @@ data/*.db
 data/*.json
 data/*.tmp
 npm-debug.log*
+.netlify/*
+!.netlify/results.md
